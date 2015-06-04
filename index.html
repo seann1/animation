@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Sean's Checklist</title>
+		<link rel="stylesheet" href="styles.css">
+		<script type="text/javascript" src="jquery.min.js"></script>
+		<script type="text/javascript" src="jquery-ui.min.js"></script>
+
+		<style>
+		body {
+				color: #333;
+				background-color: #eee;
+				font-family: Helvetica, 'Century Gothic', Arial, sans;
+				font-size: 14px;
+				line-height: 26px;
+				padding: 15px;
+			}
+
+			fieldset {
+				background-color: #FFFFFF;
+				border: medium none;
+				box-shadow: 0 0 6px #C8C2C2;
+				margin: 0 auto 25px; auto;
+				max-width: 700px;
+				padding: 15px 50px;
+			}
+			
+			h1 {
+				background-color: #eee;
+				font-size: 3em;
+				font-weight: bold;
+				text-align: center;
+			}
+
+			fieldset h1 {
+				background-color: #fff;
+				font-size: 2em;
+				font-weight: bold;
+				text-align: left;
+			}
+
+			hr {
+				border: 0;
+				height: 1px;
+				background: #eee;
+			}
+
+			.inline {
+				display: inline-block;
+			}
+
+			.item {
+				padding-left: 5px;
+			}
+
+			.block {
+				display: block;
+			}
+
+			body {
+				overflow-x: hidden;
+			}
+
+			.square1 {
+				position: fixed;
+				left: 0px;
+				bottom: 0px;
+				height: 2px;
+				width: 2px;
+				background-color: #1b9300;
+				opacity: 0.8;
+				filter: hue-rotate(0deg);
+				-webkit-filter: hue-rotate(0deg);
+			}
+
+			.square2 {
+				position: fixed;
+				right: 0px;
+				bottom: 0px;
+				height: 2px;
+				width: 2px;
+				background-color: #1b9300;
+				opacity: 0.8;
+				filter: hue-rotate(0deg);
+				-webkit-filter: hue-rotate(0deg);
+			}
+		</style>
+		<script>
+			var hue = 0, left = 0, right = 0, bottom = 0, delay = 0, counter = 0, hueCounter = 0, idCounter = 0, colorCount = 0, bottomUp = 0, widthChange;
+			var hueRotate = function(){
+				if (hueCounter > 200) {
+					return;
+				} else {
+			  		hue++;
+					if(hue >= 360)
+					    hue = 0;
+
+					  	$(".square1, .square2").css("-webkit-filter", "hue-rotate("+hue+"deg)");
+					  	$(".square1, .square2").css("filter", "hue-rotate("+hue+"deg)");
+
+				  	setTimeout(hueRotate, 10);
+				  	hueCounter += 100;
+			    }
+			};
+
+			$(document).ready(function() {
+				var counter = 0;
+				hueRotate();
+				var animateFunc = setInterval(function() {
+					console.log(counter);
+					if (counter > 400) {
+						window.clearInterval(animateFunc);
+						$(".square1, .square2").remove();
+						return;
+					} else {
+						var colorsArray =   [{first: "#61b2d8", second: "#ffb600"}, {first: "#1cdd56", second: "#004e72"}, {first: "#c4dd1c", second: "#000000"}];
+						$('.body').append("<div class='square1 color" + colorCount + "' style='left: " + left + "px;bottom: " + bottom + "px;'></div>");
+						$('.body').append("<div class='square2 color" + colorCount  + "' style='right: " + right + "px;bottom: " + bottom + "px;'></div>");
+						// $('.color0').css("background-color", colorsArray[0].first);
+						// $('.color1').css("background-color", colorsArray[1].first);
+						// $('.color2').css("background-color", colorsArray[2].first);
+
+						bottomUp += 2.4
+						bottom += (1.6 * bottomUp);
+						widthChange += (1.6 * bottomUp);
+						right += 40;
+						left += 40;
+						delay += 500;
+						counter += 1;
+						$(".square1, .square2").animate({"height":"300px", "width": "80px", "-webkit-border-radius": "100%", "border-radius": "100%", backgroundColor: colorsArray[0].second, "bottom": (bottom * 3 + bottomUp).toString()+"px"}, 4000).animate({"height": (bottom * 1.2 + bottomUp).toString()+"px", "width": (widthChange * 1.2 + bottomUp).toString()+"px", "-webkit-border-radius": "70%", "border-radius": "70%", backgroundColor: colorsArray[2].second, "top": (bottom * 1.5 + bottomUp).toString()+"px" }, 3000);
+						$(".square1").animate({"padding-right": '"' + widthChange + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": "300px"}, 3000).fadeOut(2000);
+						$(".square2").animate({"padding-left": '"' + widthChange + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": "300px"}, 3000).fadeOut(2000);
+						if (colorCount > 1) {
+							colorCount = 0;
+						} else {
+							colorCount +=1;
+						}
+					}
+					counter += 1;
+				}, 70);
+				window.setTimeout(animateFunc, 20);
+			});
+		</script>
+	</head>
+	<body class="body">
+		<fieldset>
+
+			<h1>All Projects</h1>
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded1" name="check" />
+						<label for="rounded1"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Check spelling of content</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded19" name="check" />
+						<label for="rounded19"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Copy ticket number and use it in comments</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded2" name="check" />
+						<label for="rounded2"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Read all emails in ticket</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded3" name="check" />
+						<label for="rounded3"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Read all notes in ticket</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded4" name="check" />
+						<label for="rounded4"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Leave note in ticket with starting revision number</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded5" name="check" />
+						<label for="rounded5"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Check trunk-demo-live compare</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded6" name="check" />
+						<label for="rounded6"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Extra testing at the end of long tickets.</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded18" name="check" />
+						<label for="rounded18"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Void your transactions</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded18" name="check" />
+						<label for="rounded18"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Make sure punctuation is consistent (colons or no colons)</p>
+				</div>
+			</div>
+
+			<hr>
+
+			<h2>If sending to QA</h2>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded17" name="check" />
+						<label for="rounded17"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Add a note to QA that you finished this checklist.</p>
+				</div>
+			</div>
+
+		</fieldset>
+
+		<fieldset>
+
+			<h1>New Looks</h1>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded7" name="check" />
+						<label for="rounded7"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Pay more attention to preserving content layout details.</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded8" name="check" />
+						<label for="rounded8"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Remove requiredness and add dependency rules to required phone inputs.</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded9" name="check" />
+						<label for="rounded9"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Add "ufe-req" class to required inputs.</p>
+				</div>
+			</div>
+			
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded10" name="check" />
+						<label for="rounded10"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Do not change requiredness of fields after form has been jazzmined</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded11" name="check" />
+						<label for="rounded11"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Make sure all content is inside of fieldsets</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded12" name="check" />
+						<label for="rounded12"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Check all links, make sure they are not broken</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded13" name="check" />
+						<label for="rounded13"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Check spelling</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded14" name="check" />
+						<label for="rounded14"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Don't be hackin'</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded15" name="check" />
+						<label for="rounded15"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Check that adaptive display is behaving the way you want it to</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded16" name="check" />
+						<label for="rounded16"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Check var compare and make sure your counters are working properly</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded18" name="check" />
+						<label for="rounded18"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Style un-editable fields differently than editable ones in all browsers</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded22" name="check" />
+						<label for="rounded22"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">Add index.html and index.ftl to htdocs folder</p>
+				</div>
+			</div>
+
+			<div class="block">
+				<div class="inline">
+					<div class="roundedOne">
+						<input type="checkbox" value="None" id="rounded23" name="check" />
+						<label for="rounded23"></label>
+					</div>
+				</div>
+				<div class="inline">
+					<p class="item">If there is a .tmpl file, edit it instead of the index.ftl.html file</p>
+				</div>
+			</div>
+			
+		</fieldset>
+	
+	
+		<fieldset>
+			<h1>Removed</h1>
+
+		</fieldset>
+	</body>
+</html>
