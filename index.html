@@ -4,47 +4,21 @@
 		<meta charset="UTF-8">
 		<title>Sean's Checklist</title>
 		<link rel="stylesheet" href="styles.css">
+		<link rel="stylesheet" href="spectrum.css">
 		<link rel="stylesheet" href="jquery-ui.min.css">
 		<script type="text/javascript" src="jquery.min.js"></script>
 		<script type="text/javascript" src="jquery-ui.min.js"></script>
+		<script type="text/javascript" src="spectrum.js"></script>
+		<script type="text/javascript" src="underscore.js"></script>
 
 		<style>
 			body {
 				color: #333;
-				background-color: #eee;
+				background-color: #00bfff;
 				font-family: Helvetica, 'Century Gothic', Arial, sans;
 				font-size: 14px;
 				line-height: 26px;
 				padding: 15px;
-			}
-
-			fieldset {
-				background-color: #FFFFFF;
-				border: medium none;
-				box-shadow: 0 0 6px #C8C2C2;
-				margin: 0 auto 25px; auto;
-				max-width: 700px;
-				padding: 15px 50px;
-			}
-			
-			h1 {
-				background-color: #eee;
-				font-size: 3em;
-				font-weight: bold;
-				text-align: center;
-			}
-
-			fieldset h1 {
-				background-color: #fff;
-				font-size: 2em;
-				font-weight: bold;
-				text-align: left;
-			}
-
-			hr {
-				border: 0;
-				height: 1px;
-				background: #eee;
 			}
 
 			.inline {
@@ -63,7 +37,7 @@
 				overflow-x: hidden;
 			}
 
-			.square1 {
+			.square1, .square3 {
 				position: fixed;
 				left: 0px;
 				bottom: 0px;
@@ -75,7 +49,7 @@
 				-webkit-filter: hue-rotate(0deg);
 			}
 
-			.square2 {
+			.square2, .square4 {
 				position: fixed;
 				right: 0px;
 				bottom: 0px;
@@ -92,21 +66,47 @@
 				bottom: 0;
 				right: 0;
 				height: 200px;
-				width: 300px;
-				background-color: rgba(0, 0, 0, 0.5);
+				width: 100%;
+				background-color: rgba(0, 0, 0, 0.2);
 				z-index: 100;
+				display: inline;
 			}
 
 			.ui-slider {
-				background-color: black;
+				margin-top: 10px;
+				margin-right: 10px;
+				background-color: pink;
+				border: 0px;
+				border-radius: 0px;
+				width: 25%;
+				float: right;
 			}
 
 			.ui-slider-handle {
-			    color: #777777;
-			    font-size: 10px;
-			    padding: 3px;
-			    text-shadow: 0 1px 0 #FFFFFF;
-			    text-decoration:none;
+			    background-color: #b2ff00 !important;
+			    border-radius: 0px;
+			    border: 0px !important;
+
+			}
+
+			.button {
+				position: fixed;
+				height: 40px;
+				width: 40px;
+				background-color: pink;
+				right: 0px;
+				bottom: 200px;
+				cursor: pointer;
+				z-index: 100;
+			}
+
+			.fixedContainer {
+/*			    position: fixed;
+			    padding: 2em;
+			    left: 25%;
+			    top: 25%;
+			    transform: translate(-75%, -75%);*/
+			    zoom: 50%;
 			}
 
 
@@ -119,372 +119,146 @@
 			        max: 100,
 			        value: 60
 			    });
-			}); 
 
-			var hue = 0, left = 0, right = 0, bottom = 0, delay = 0, counter = 0, hueCounter = 0, idCounter = 0, colorCount = 0, bottomUp = 0, widthChange, dynamicBottom = 0;
-			var hueRotate = function(){
-				if (hueCounter > 200) {
-					return;
-				} else {
-			  		hue++;
-					if(hue >= 360)
-					    hue = 0;
+			    $("#spect1").spectrum({
+    				color: "#f00",
+    				preferredFormat: "hex"
+				});
 
-					  	$(".square1, .square2").css("-webkit-filter", "hue-rotate("+hue+"deg)");
-					  	$(".square1, .square2").css("filter", "hue-rotate("+hue+"deg)");
+				$("#spect2").spectrum({
+    				color: "#f00"
+				});
 
-				  	setTimeout(hueRotate, 10);
-				  	hueCounter += 100;
-			    }
-			};
+				$("#spect3").spectrum({
+    				color: "#f00"
+				});
+			});
 
 			$(document).ready(function() {
-				var counter = 0;
-				console.log(bottom);
-				var animateFunc = setInterval(function() {
-					var sliderValue = $(".slider1").slider("value") / 20;
-					console.log(sliderValue);
-					if (counter > 300) {
-						window.clearInterval(animateFunc);
-						$(".square1, .square2").remove();
-						return;
-					} else {
-						var colorsArray =   [{first: "#61b2d8", second: "#ffb600"}, {first: "#1cdd56", second: "#004e72"}, {first: "#c4dd1c", second: "#000000"}];
-						$('.body').append("<div class='square1 color" + colorCount + "' style='left: " + left + "px;bottom: " + bottom + "px;'></div>");
-						$('.body').append("<div class='square2 color" + colorCount  + "' style='right: " + right + "px;bottom: " + bottom + "px;'></div>");
-						hueRotate();
-						bottomUp += 2.4
-						bottom += (1.6 * bottomUp);
-						widthChange += (1.6 * bottomUp);
-						right += 40;
-						left += 40;
-						delay += 500;
-						counter += 1;
+					var spect1 = ["#004e72"];
+					var spect2 = ["#c4dd1c"];
+					var spect3 = ["#000000"];
+					$('#spect1').change(function(){
+						spect1.push($('#spect1').val());
+					});
 
-						if (dynamicBottom < 2000) {
-							dynamicBottom = (bottom * 3 + bottomUp);
-						}
-						else {
-							dynamicBottom = (dynamicBottom / 2) + (dynamicBottom / 4.6)
-						}
-						dynamicBottom;
+					$('#spect2').change(function(){
+						spect2.push($('#spect2').val());
+					});
 
-						console.log(dynamicBottom);
-						$(".square1, .square2").animate({"height":"300px", "width": "80px", "-webkit-border-radius": "100%", "border-radius": "100%", backgroundColor: colorsArray[0].second, "bottom": (dynamicBottom * sliderValue).toString()+"px"}, 4000)
-						.animate({"height": ((dynamicBottom * 1.2 + bottomUp) * sliderValue).toString()+"px", "width": ((widthChange * 1.2 + bottomUp) * sliderValue).toString()+"px", "-webkit-border-radius": "70%", "border-radius": "70%", backgroundColor: colorsArray[2].second, "top": ((bottom * 1.5 + bottomUp) * sliderValue).toString()+"px" }, 3000);
-						$(".square1").animate({"padding-right": '"' + widthChange * sliderValue + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": ((dynamicBottom * sliderValue)/2).toString()+"px"}, 3000).fadeOut(2000);
-						$(".square2").animate({"padding-left": '"' + widthChange * sliderValue + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": ((dynamicBottom * sliderValue)/2).toString()+"px"}, 3000).fadeOut(2000);
-						if (colorCount > 1) {
-							colorCount = 0;
+					$('#spect3').change(function(){
+						spect3.push($('#spect3').val());
+					});
+				function forwards() {
+					var hue = 0, left = 0, right = 0, bottom = 0, delay = 0, counter = 0, hueCounter = 0, idCounter = 0, colorCount = 0, bottomUp = 0, widthChange, dynamicBottom = 0;
+					var counter = 0;
+					var animateFunc = setInterval(function() {
+						var sliderValue = $(".slider1").slider("value") / 40;
+						if (counter > 150) {
+							reverseFunc(spect1, spect2, spect3);
+							window.clearInterval(animateFunc);
+							setTimeout(function() {$(".square1, .square2").fadeOut(4000).remove();}, 5000);
+							return;
 						} else {
-							colorCount +=1;
+							var colorsArray =   [{first: _.sample(spect1), second: _.sample(spect1)}, {first: _.sample(spect2), second: _.sample(spect2)}, {first: _.sample(spect3), second: _.sample(spect3)}];
+							$('.fixedContainer').append("<div class='square1 color" + colorCount + "' style='left: " + left + "px;bottom: " + bottom + "px;'></div>");
+							$('.fixedContainer').append("<div class='square2 color" + colorCount  + "' style='right: " + right + "px;bottom: " + bottom + "px;'></div>");
+							bottomUp += 3.4
+							bottom += (1.6 * bottomUp);
+							widthChange += (1.6 * bottomUp);
+							right += 40;
+							left += 40;
+							delay += 200;
+							counter += 1;
+
+							if (dynamicBottom < 2000) {
+								dynamicBottom = (bottom * 3 + bottomUp);
+							}
+							else {
+								dynamicBottom = (dynamicBottom / 2) + (dynamicBottom / 4.6)
+							}
+							dynamicBottom;
+
+							$(".square1, .square2").animate({"height": (right * sliderValue).toString()+"px", "width": "80px", "-webkit-border-radius": "100%", "border-radius": "100%", backgroundColor: colorsArray[0].second, "bottom": (dynamicBottom/2 * sliderValue - 250).toString()+"px"}, 4000)
+							.animate({"height": ((dynamicBottom * 1.2 + bottomUp) * sliderValue).toString()+"px", "width": ((widthChange * 1.2 + bottomUp) * sliderValue).toString()+"px", "-webkit-border-radius": "70%", "border-radius": "70%", backgroundColor: colorsArray[2].second, "top": ((bottom * 1.5 + bottomUp) * sliderValue).toString()+"px" }, 3000);
+							$(".square1").animate({"padding-right": + (widthChange * sliderValue).toString() + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": ((dynamicBottom * sliderValue)/2).toString()+"px"}, 3000).fadeOut(2000);
+							$(".square2").animate({"padding-left": + (widthChange * sliderValue).toString() + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": ((dynamicBottom * sliderValue)/2).toString()+"px"}, 3000).fadeOut(2000);
+							if (colorCount > 1) {
+								colorCount = 0;
+							} else {
+								colorCount +=1;
+							}
 						}
-					}
-					counter += 1;
-				}, 70);
-				window.setTimeout(animateFunc, 20);
+						counter += 1;
+					}, 150);
+
+				};
+
+				$(".button").clickToggle(function() {
+					$(".slider-container").animate({"bottom": "-200px"});
+					$(".button").animate({"bottom": "0px"});
+				}, function() {$(".slider-container").animate({"bottom": "0px"});
+							   $(".button").animate({"bottom": "200px"});
+				});
+				forwards();
+
+				function reverseFunc(array1, array2, array3) {
+
+					var hue = 0, left = 0, right = 0, bottom = 0, delay = 0, counter = 0, hueCounter = 0, idCounter = 0, colorCount = 0, bottomUp = 0, widthChange, dynamicBottom = 0;
+
+					var animateFunc2 = setInterval(function() {
+						var sliderValue = $(".slider1").slider("value") / 80;
+						if (counter > 50) {
+							forwards(spect1, spect2, spect3);
+							window.clearInterval(animateFunc2);
+							setTimeout(function() {$(".square3, .square4").fadeOut(4000).remove();}, 5000);
+							return;
+						} else {
+							var colorsArray =   [{first: _.sample(spect1), second: _.sample(spect1)}, {first: _.sample(spect2), second: _.sample(spect2)}, {first: _.sample(spect3), second: _.sample(spect3)}];
+							$('.fixedContainer').append("<div class='square3 color" + colorCount + "' style='left: " + left + "px;top: " + bottom + "px;'></div>");
+							$('.fixedContainer').append("<div class='square4 color" + colorCount  + "' style='right: " + right + "px;top: " + bottom + "px;'></div>");
+							bottomUp -= 2.4
+							bottom += (2.6 * bottomUp / 3);
+							widthChange += (1.6 * bottomUp);
+							right += 20;
+							left += 20;
+							delay -= 500;
+							counter += 1;
+
+							if (dynamicBottom < 2000) {
+								dynamicBottom = (bottom / 5 + bottomUp);
+							}
+							else {
+								dynamicBottom = (dynamicBottom / 4) + (dynamicBottom / 4.6)
+							}
+							dynamicBottom;
+
+							$(".square3, .square4").animate({"height": (right * sliderValue * 2).toString()+"px", "width": "80px", "opacity": 1, "-webkit-border-radius": "100%", "border-radius": "100%", backgroundColor: colorsArray[0].first, "bottom": (dynamicBottom * sliderValue).toString()+"px"}, 4000)
+							.animate({"height": ((dynamicBottom * 2.2 + bottomUp) * sliderValue).toString()+"px", "width": ((widthChange * 1.2 + bottomUp) * sliderValue).toString()+"px", "-webkit-border-radius": "70%", "border-radius": "70%", backgroundColor: colorsArray[2].first, "top": ((bottom * 1.5 + bottomUp) * sliderValue).toString()+"px" }, 3000);
+							$(".square3").animate({"padding-right": + (widthChange * sliderValue).toString() + "px", "opacity": 1, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].first, "top": ((dynamicBottom * sliderValue)).toString()+"px"}, 3000).fadeOut(2000);
+							$(".square4").animate({"padding-left": + (widthChange * sliderValue).toString() + "px", "opacity": 1, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].first, "top": ((dynamicBottom * sliderValue)).toString()+"px"}, 3000).fadeOut(2000);
+							if (colorCount > 1) {
+								colorCount = 0;
+							} else {
+								colorCount +=1;
+							}
+						}
+					}, 150);
+
+				}
 			});
 		</script>
 	</head>
 	<body class="body">
+		<div class="fixedContainer">
+		</div>
+		<div class="button">
+		</div>
 		<div class="slider-container">
+			<input type="text" id="spect1"/>
+			<input type="text" id="spect2"/>
+			<input type="text" id="spect3"/>
 			<div class="slider1"></div>
 		</div>
-		<fieldset>
-
-			<h1>All Projects</h1>
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded1" name="check" />
-						<label for="rounded1"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Check spelling of content</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded19" name="check" />
-						<label for="rounded19"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Copy ticket number and use it in comments</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded2" name="check" />
-						<label for="rounded2"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Read all emails in ticket</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded3" name="check" />
-						<label for="rounded3"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Read all notes in ticket</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded4" name="check" />
-						<label for="rounded4"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Leave note in ticket with starting revision number</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded5" name="check" />
-						<label for="rounded5"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Check trunk-demo-live compare</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded6" name="check" />
-						<label for="rounded6"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Extra testing at the end of long tickets.</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded18" name="check" />
-						<label for="rounded18"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Void your transactions</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded18" name="check" />
-						<label for="rounded18"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Make sure punctuation is consistent (colons or no colons)</p>
-				</div>
-			</div>
-
-			<hr>
-
-			<h2>If sending to QA</h2>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded17" name="check" />
-						<label for="rounded17"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Add a note to QA that you finished this checklist.</p>
-				</div>
-			</div>
-
-		</fieldset>
-
-		<fieldset>
-
-			<h1>New Looks</h1>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded7" name="check" />
-						<label for="rounded7"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Pay more attention to preserving content layout details.</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded8" name="check" />
-						<label for="rounded8"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Remove requiredness and add dependency rules to required phone inputs.</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded9" name="check" />
-						<label for="rounded9"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Add "ufe-req" class to required inputs.</p>
-				</div>
-			</div>
-			
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded10" name="check" />
-						<label for="rounded10"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Do not change requiredness of fields after form has been jazzmined</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded11" name="check" />
-						<label for="rounded11"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Make sure all content is inside of fieldsets</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded12" name="check" />
-						<label for="rounded12"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Check all links, make sure they are not broken</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded13" name="check" />
-						<label for="rounded13"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Check spelling</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded14" name="check" />
-						<label for="rounded14"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Don't be hackin'</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded15" name="check" />
-						<label for="rounded15"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Check that adaptive display is behaving the way you want it to</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded16" name="check" />
-						<label for="rounded16"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Check var compare and make sure your counters are working properly</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded18" name="check" />
-						<label for="rounded18"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Style un-editable fields differently than editable ones in all browsers</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded22" name="check" />
-						<label for="rounded22"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">Add index.html and index.ftl to htdocs folder</p>
-				</div>
-			</div>
-
-			<div class="block">
-				<div class="inline">
-					<div class="roundedOne">
-						<input type="checkbox" value="None" id="rounded23" name="check" />
-						<label for="rounded23"></label>
-					</div>
-				</div>
-				<div class="inline">
-					<p class="item">If there is a .tmpl file, edit it instead of the index.ftl.html file</p>
-				</div>
-			</div>
-			
-		</fieldset>
-	
-	
-		<fieldset>
-			<h1>Removed</h1>
-
-		</fieldset>
 	</body>
 </html>
