@@ -4,11 +4,12 @@
 		<meta charset="UTF-8">
 		<title>Sean's Checklist</title>
 		<link rel="stylesheet" href="styles.css">
+		<link rel="stylesheet" href="jquery-ui.min.css">
 		<script type="text/javascript" src="jquery.min.js"></script>
 		<script type="text/javascript" src="jquery-ui.min.js"></script>
 
 		<style>
-		body {
+			body {
 				color: #333;
 				background-color: #eee;
 				font-family: Helvetica, 'Century Gothic', Arial, sans;
@@ -85,9 +86,42 @@
 				filter: hue-rotate(0deg);
 				-webkit-filter: hue-rotate(0deg);
 			}
+
+			.slider-container {
+				position: fixed;
+				bottom: 0;
+				right: 0;
+				height: 200px;
+				width: 300px;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 100;
+			}
+
+			.ui-slider {
+				background-color: black;
+			}
+
+			.ui-slider-handle {
+			    color: #777777;
+			    font-size: 10px;
+			    padding: 3px;
+			    text-shadow: 0 1px 0 #FFFFFF;
+			    text-decoration:none;
+			}
+
+
 		</style>
 		<script>
-			var hue = 0, left = 0, right = 0, bottom = 0, delay = 0, counter = 0, hueCounter = 0, idCounter = 0, colorCount = 0, bottomUp = 0, widthChange;
+			$(function() {
+				$(".slider1").slider({
+			        orientation: "horizontal",
+			        min: -100,
+			        max: 100,
+			        value: 60
+			    });
+			}); 
+
+			var hue = 0, left = 0, right = 0, bottom = 0, delay = 0, counter = 0, hueCounter = 0, idCounter = 0, colorCount = 0, bottomUp = 0, widthChange, dynamicBottom = 0;
 			var hueRotate = function(){
 				if (hueCounter > 200) {
 					return;
@@ -106,10 +140,11 @@
 
 			$(document).ready(function() {
 				var counter = 0;
-				hueRotate();
+				console.log(bottom);
 				var animateFunc = setInterval(function() {
-					console.log(counter);
-					if (counter > 400) {
+					var sliderValue = $(".slider1").slider("value") / 20;
+					console.log(sliderValue);
+					if (counter > 300) {
 						window.clearInterval(animateFunc);
 						$(".square1, .square2").remove();
 						return;
@@ -117,10 +152,7 @@
 						var colorsArray =   [{first: "#61b2d8", second: "#ffb600"}, {first: "#1cdd56", second: "#004e72"}, {first: "#c4dd1c", second: "#000000"}];
 						$('.body').append("<div class='square1 color" + colorCount + "' style='left: " + left + "px;bottom: " + bottom + "px;'></div>");
 						$('.body').append("<div class='square2 color" + colorCount  + "' style='right: " + right + "px;bottom: " + bottom + "px;'></div>");
-						// $('.color0').css("background-color", colorsArray[0].first);
-						// $('.color1').css("background-color", colorsArray[1].first);
-						// $('.color2').css("background-color", colorsArray[2].first);
-
+						hueRotate();
 						bottomUp += 2.4
 						bottom += (1.6 * bottomUp);
 						widthChange += (1.6 * bottomUp);
@@ -128,9 +160,20 @@
 						left += 40;
 						delay += 500;
 						counter += 1;
-						$(".square1, .square2").animate({"height":"300px", "width": "80px", "-webkit-border-radius": "100%", "border-radius": "100%", backgroundColor: colorsArray[0].second, "bottom": (bottom * 3 + bottomUp).toString()+"px"}, 4000).animate({"height": (bottom * 1.2 + bottomUp).toString()+"px", "width": (widthChange * 1.2 + bottomUp).toString()+"px", "-webkit-border-radius": "70%", "border-radius": "70%", backgroundColor: colorsArray[2].second, "top": (bottom * 1.5 + bottomUp).toString()+"px" }, 3000);
-						$(".square1").animate({"padding-right": '"' + widthChange + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": "300px"}, 3000).fadeOut(2000);
-						$(".square2").animate({"padding-left": '"' + widthChange + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": "300px"}, 3000).fadeOut(2000);
+
+						if (dynamicBottom < 2000) {
+							dynamicBottom = (bottom * 3 + bottomUp);
+						}
+						else {
+							dynamicBottom = (dynamicBottom / 2) + (dynamicBottom / 4.6)
+						}
+						dynamicBottom;
+
+						console.log(dynamicBottom);
+						$(".square1, .square2").animate({"height":"300px", "width": "80px", "-webkit-border-radius": "100%", "border-radius": "100%", backgroundColor: colorsArray[0].second, "bottom": (dynamicBottom * sliderValue).toString()+"px"}, 4000)
+						.animate({"height": ((dynamicBottom * 1.2 + bottomUp) * sliderValue).toString()+"px", "width": ((widthChange * 1.2 + bottomUp) * sliderValue).toString()+"px", "-webkit-border-radius": "70%", "border-radius": "70%", backgroundColor: colorsArray[2].second, "top": ((bottom * 1.5 + bottomUp) * sliderValue).toString()+"px" }, 3000);
+						$(".square1").animate({"padding-right": '"' + widthChange * sliderValue + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": ((dynamicBottom * sliderValue)/2).toString()+"px"}, 3000).fadeOut(2000);
+						$(".square2").animate({"padding-left": '"' + widthChange * sliderValue + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": ((dynamicBottom * sliderValue)/2).toString()+"px"}, 3000).fadeOut(2000);
 						if (colorCount > 1) {
 							colorCount = 0;
 						} else {
@@ -144,6 +187,9 @@
 		</script>
 	</head>
 	<body class="body">
+		<div class="slider-container">
+			<div class="slider1"></div>
+		</div>
 		<fieldset>
 
 			<h1>All Projects</h1>
