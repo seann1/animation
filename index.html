@@ -33,10 +33,6 @@
 				display: block;
 			}
 
-			body {
-				overflow-x: hidden;
-			}
-
 			.square1, .square3 {
 				position: fixed;
 				left: 0px;
@@ -106,7 +102,11 @@
 			    left: 25%;
 			    top: 25%;
 			    transform: translate(-75%, -75%);*/
-			    zoom: 50%;
+			    zoom: 25%;
+			}
+
+			.fixedContainer2 {
+				transform: rotate(180deg);
 			}
 
 
@@ -135,8 +135,9 @@
 			});
 
 			$(document).ready(function() {
-					var spect1 = ["#004e72"];
-					var spect2 = ["#c4dd1c"];
+					forwards(spect1, spect2, spect3);
+					var spect1 = ["#004e72", "#1ee6fc", "#8316e2"];
+					var spect2 = ["#c4dd1c", "#ff0000", "#bc2599"];
 					var spect3 = ["#000000"];
 					$('#spect1').change(function(){
 						spect1.push($('#spect1').val());
@@ -149,40 +150,42 @@
 					$('#spect3').change(function(){
 						spect3.push($('#spect3').val());
 					});
-				function forwards() {
-					var hue = 0, left = 0, right = 0, bottom = 0, delay = 0, counter = 0, hueCounter = 0, idCounter = 0, colorCount = 0, bottomUp = 0, widthChange, dynamicBottom = 0;
-					var counter = 0;
+				function forwards(array1, array2, array3) {
+					var hue = 0, left = 0, right = 0, bottom = 0, delay = 0, counter = 0, hueCounter = 0, idCounter = 0,counter, colorCount = 0, bottomUp = 0, widthChange, dynamicBottom = 0;
 					var animateFunc = setInterval(function() {
+						console.log(counter);
 						var sliderValue = $(".slider1").slider("value") / 40;
-						if (counter > 150) {
+						if (counter > 200) {
 							reverseFunc(spect1, spect2, spect3);
+							$(".square1, .square2").fadeOut(2000).remove();
 							window.clearInterval(animateFunc);
-							setTimeout(function() {$(".square1, .square2").fadeOut(4000).remove();}, 5000);
+							counter=0;
 							return;
 						} else {
 							var colorsArray =   [{first: _.sample(spect1), second: _.sample(spect1)}, {first: _.sample(spect2), second: _.sample(spect2)}, {first: _.sample(spect3), second: _.sample(spect3)}];
 							$('.fixedContainer').append("<div class='square1 color" + colorCount + "' style='left: " + left + "px;bottom: " + bottom + "px;'></div>");
 							$('.fixedContainer').append("<div class='square2 color" + colorCount  + "' style='right: " + right + "px;bottom: " + bottom + "px;'></div>");
-							bottomUp += 3.4
+							bottomUp += 1.4
 							bottom += (1.6 * bottomUp);
 							widthChange += (1.6 * bottomUp);
-							right += 40;
-							left += 40;
+							right += 10;
+							left += 10;
 							delay += 200;
 							counter += 1;
 
 							if (dynamicBottom < 2000) {
-								dynamicBottom = (bottom * 3 + bottomUp);
+								dynamicBottom = (bottom * 3) / 2;
 							}
 							else {
-								dynamicBottom = (dynamicBottom / 2) + (dynamicBottom / 4.6)
+								dynamicBottom = (dynamicBottom / 2) + (dynamicBottom / 4.6) / 2
 							}
 							dynamicBottom;
-
-							$(".square1, .square2").animate({"height": (right * sliderValue).toString()+"px", "width": "80px", "-webkit-border-radius": "100%", "border-radius": "100%", backgroundColor: colorsArray[0].second, "bottom": (dynamicBottom/2 * sliderValue - 250).toString()+"px"}, 4000)
-							.animate({"height": ((dynamicBottom * 1.2 + bottomUp) * sliderValue).toString()+"px", "width": ((widthChange * 1.2 + bottomUp) * sliderValue).toString()+"px", "-webkit-border-radius": "70%", "border-radius": "70%", backgroundColor: colorsArray[2].second, "top": ((bottom * 1.5 + bottomUp) * sliderValue).toString()+"px" }, 3000);
-							$(".square1").animate({"padding-right": + (widthChange * sliderValue).toString() + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": ((dynamicBottom * sliderValue)/2).toString()+"px"}, 3000).fadeOut(2000);
-							$(".square2").animate({"padding-left": + (widthChange * sliderValue).toString() + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": ((dynamicBottom * sliderValue)/2).toString()+"px"}, 3000).fadeOut(2000);
+							console.log(sliderValue);
+							$(".square1, .square2").animate({"height": (right * sliderValue).toString()+"px", "width": ((sliderValue * 100)).toString()+"px", "-webkit-border-radius": "100%", "border-radius": "100%", backgroundColor: colorsArray[0].second, "bottom": (dynamicBottom/2 * sliderValue - 500).toString()+"px"}, 4000)
+							.animate({"height": ((dynamicBottom * 1.2 + bottomUp) * sliderValue).toString()+"px", "width": ((widthChange * 1.2 + bottomUp) * (sliderValue * .5)).toString()+"px", "-webkit-border-radius": "70%", "border-radius": "70%", backgroundColor: colorsArray[2].second, "top": ((bottom * 1.5 + bottomUp) * sliderValue).toString()+"px" }, 3000);
+							$(".square1").animate({"padding-right": + ((right/10) * (sliderValue * 100)).toString() + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": ((dynamicBottom * sliderValue)/2).toString()+"px"}, 3000).fadeOut(2000);
+							$(".square2").animate({"padding-left": + ((left/10) * (sliderValue * 100)).toString() + "px", "opacity": 0.2, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].second, "top": ((dynamicBottom * sliderValue)/2).toString()+"px"}, 3000).fadeOut(2000);
+							
 							if (colorCount > 1) {
 								colorCount = 0;
 							} else {
@@ -191,7 +194,6 @@
 						}
 						counter += 1;
 					}, 150);
-
 				};
 
 				$(".button").clickToggle(function() {
@@ -200,7 +202,6 @@
 				}, function() {$(".slider-container").animate({"bottom": "0px"});
 							   $(".button").animate({"bottom": "200px"});
 				});
-				forwards();
 
 				function reverseFunc(array1, array2, array3) {
 
@@ -208,49 +209,53 @@
 
 					var animateFunc2 = setInterval(function() {
 						var sliderValue = $(".slider1").slider("value") / 80;
-						if (counter > 50) {
+						console.log(counter);
+						if (counter > 150) {
 							forwards(spect1, spect2, spect3);
+							$(".square3, .square4").fadeOut(2000).remove();
 							window.clearInterval(animateFunc2);
-							setTimeout(function() {$(".square3, .square4").fadeOut(4000).remove();}, 5000);
+							counter = 0;
 							return;
 						} else {
 							var colorsArray =   [{first: _.sample(spect1), second: _.sample(spect1)}, {first: _.sample(spect2), second: _.sample(spect2)}, {first: _.sample(spect3), second: _.sample(spect3)}];
-							$('.fixedContainer').append("<div class='square3 color" + colorCount + "' style='left: " + left + "px;top: " + bottom + "px;'></div>");
-							$('.fixedContainer').append("<div class='square4 color" + colorCount  + "' style='right: " + right + "px;top: " + bottom + "px;'></div>");
-							bottomUp -= 2.4
-							bottom += (2.6 * bottomUp / 3);
+							$('.fixedContainer').append("<div class='square3 color" + colorCount + "' style='left: " + left + "px;top: " + ((bottom / 2) * sliderValue).toString() + "px;'></div>");
+							$('.fixedContainer').append("<div class='square4 color" + colorCount  + "' style='right: " + right + "px;top: " + ((bottom / 2) * sliderValue).toString() + "px;'></div>");
+							bottomUp += 1.4
+							bottom += (1.6 * 4);
 							widthChange += (1.6 * bottomUp);
-							right += 20;
-							left += 20;
+							right += 10;
+							left += 10;
 							delay -= 500;
 							counter += 1;
 
-							if (dynamicBottom < 2000) {
-								dynamicBottom = (bottom / 5 + bottomUp);
+							if (dynamicBottom < 500) {
+								dynamicBottom = (bottom / 20 + bottomUp);
 							}
 							else {
 								dynamicBottom = (dynamicBottom / 4) + (dynamicBottom / 4.6)
 							}
 							dynamicBottom;
 
-							$(".square3, .square4").animate({"height": (right * sliderValue * 2).toString()+"px", "width": "80px", "opacity": 1, "-webkit-border-radius": "100%", "border-radius": "100%", backgroundColor: colorsArray[0].first, "bottom": (dynamicBottom * sliderValue).toString()+"px"}, 4000)
-							.animate({"height": ((dynamicBottom * 2.2 + bottomUp) * sliderValue).toString()+"px", "width": ((widthChange * 1.2 + bottomUp) * sliderValue).toString()+"px", "-webkit-border-radius": "70%", "border-radius": "70%", backgroundColor: colorsArray[2].first, "top": ((bottom * 1.5 + bottomUp) * sliderValue).toString()+"px" }, 3000);
-							$(".square3").animate({"padding-right": + (widthChange * sliderValue).toString() + "px", "opacity": 1, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].first, "top": ((dynamicBottom * sliderValue)).toString()+"px"}, 3000).fadeOut(2000);
-							$(".square4").animate({"padding-left": + (widthChange * sliderValue).toString() + "px", "opacity": 1, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].first, "top": ((dynamicBottom * sliderValue)).toString()+"px"}, 3000).fadeOut(2000);
+							$(".square3, .square4").animate({"height": (right * sliderValue * 2).toString()+"px", "width": ((right) + (sliderValue * 100)).toString()+"px", "opacity": 1, "-webkit-border-radius": "100%", "border-radius": "100%", backgroundColor: colorsArray[0].first, "bottom": ((sliderValue * 80) - 100).toString()+"px"}, 4000)
+							.animate({"height": ((dynamicBottom * 2.2 + bottomUp) * sliderValue).toString()+"px", "width": ((right) + (sliderValue * 100)).toString()+"px", "-webkit-border-radius": "70%", "border-radius": "70%", backgroundColor: colorsArray[2].first, "top": ((bottom) * (sliderValue * 50)).toString()+"px" }, 3000);
+							$(".square3").animate({"padding-right": + ((widthChange) * (sliderValue * 100)).toString() + "px", "opacity": 1, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].first, "top": (dynamicBottom/10 * (sliderValue * 100)).toString()+"px"}, 3000).fadeOut(2000);
+							$(".square4").animate({"padding-left": + ((widthChange) *(sliderValue * 100)).toString() + "px", "opacity": 1, "-webkit-border-radius": "0%", "border-radius": "0%", backgroundColor: colorsArray[1].first, "top": (dynamicBottom/10 * (sliderValue * 100)).toString()+"px"}, 3000).fadeOut(2000);
 							if (colorCount > 1) {
 								colorCount = 0;
 							} else {
 								colorCount +=1;
 							}
 						}
-					}, 150);
+					}, 100);
 
-				}
+				};
 			});
 		</script>
 	</head>
 	<body class="body">
 		<div class="fixedContainer">
+		</div>
+		<div class="fixedContainer fixedContainer2">
 		</div>
 		<div class="button">
 		</div>
